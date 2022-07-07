@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const displayMap = (locations) => {
   mapboxgl.accessToken =
     'pk.eyJ1IjoiZHVjbXlwaGFtMjYxMCIsImEiOiJjbDU2bHNwZjYxa240M2pyeWF3cGZzbHhmIn0.rFRE2MbSqpf2VPOveXXj7w';
@@ -6,11 +7,14 @@ export const displayMap = (locations) => {
     container: 'map',
     style: 'mapbox://styles/ducmypham2610/cl56m63tx002c15pj6e98pfc1',
     scrollZoom: false,
+    // center: [-118.113491, 34.111745],
+    // zoom: 10,
+    // interactive: false
   });
 
   const bounds = new mapboxgl.LngLatBounds();
 
-  locations.forEach((location) => {
+  locations.forEach((loc) => {
     // Create marker
     const el = document.createElement('div');
     el.className = 'marker';
@@ -20,19 +24,19 @@ export const displayMap = (locations) => {
       element: el,
       anchor: 'bottom',
     })
-      .setLngLat(location.coordinates)
+      .setLngLat(loc.coordinates)
       .addTo(map);
 
     // Add popup
     new mapboxgl.Popup({
       offset: 30,
     })
-      .setLngLat(location.coordinates)
-      .setHTML(`<p>Day ${location.day}: ${location.description}</p>`)
+      .setLngLat(loc.coordinates)
+      .setHTML(`<p>Day ${loc.day}: ${loc.description}</p>`)
       .addTo(map);
 
     // Extend map bounds to include current location
-    bounds.extend(location.coordinates);
+    bounds.extend(loc.coordinates);
   });
 
   map.fitBounds(bounds, {

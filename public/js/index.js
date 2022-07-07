@@ -10,12 +10,12 @@ const logOutBtn = document.querySelector('.nav__el--logout');
 const loginForm = document.querySelector('.form--login');
 const formUserData = document.querySelector('.form-user-data');
 const formUserPassword = document.querySelector('.form-user-password');
-const bookBtn = document.getElementById('book-tour');
+const bookBtn = document.querySelector('.book-tour');
 // VALUES
 
 // DELEGATION
 if (mapBox) {
-  const locations = JSON.parse(mapBox.dataset.locations);
+  const locations = JSON.parse(mapBox.dataset.location);
   displayMap(locations);
 }
 

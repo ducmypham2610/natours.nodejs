@@ -11233,15 +11233,19 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.displayMap = void 0;
 
+/* eslint-disable */
 var displayMap = function displayMap(locations) {
   mapboxgl.accessToken = 'pk.eyJ1IjoiZHVjbXlwaGFtMjYxMCIsImEiOiJjbDU2bHNwZjYxa240M2pyeWF3cGZzbHhmIn0.rFRE2MbSqpf2VPOveXXj7w';
   var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/ducmypham2610/cl56m63tx002c15pj6e98pfc1',
-    scrollZoom: false
+    scrollZoom: false // center: [-118.113491, 34.111745],
+    // zoom: 10,
+    // interactive: false
+
   });
   var bounds = new mapboxgl.LngLatBounds();
-  locations.forEach(function (location) {
+  locations.forEach(function (loc) {
     // Create marker
     var el = document.createElement('div');
     el.className = 'marker'; // Add marker
@@ -11249,13 +11253,13 @@ var displayMap = function displayMap(locations) {
     new mapboxgl.Marker({
       element: el,
       anchor: 'bottom'
-    }).setLngLat(location.coordinates).addTo(map); // Add popup
+    }).setLngLat(loc.coordinates).addTo(map); // Add popup
 
     new mapboxgl.Popup({
       offset: 30
-    }).setLngLat(location.coordinates).setHTML("<p>Day ".concat(location.day, ": ").concat(location.description, "</p>")).addTo(map); // Extend map bounds to include current location
+    }).setLngLat(loc.coordinates).setHTML("<p>Day ".concat(loc.day, ": ").concat(loc.description, "</p>")).addTo(map); // Extend map bounds to include current location
 
-    bounds.extend(location.coordinates);
+    bounds.extend(loc.coordinates);
   });
   map.fitBounds(bounds, {
     padding: {
@@ -11346,6 +11350,8 @@ exports.bookTour = void 0;
 
 var _axios = _interopRequireDefault(require("axios"));
 
+var _alert = require("./alert");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -11372,20 +11378,27 @@ var bookTour = /*#__PURE__*/function () {
             session = _context.sent;
             console.log(session); // 2) Create  checkout form + charge credit card
 
-            _context.next = 11;
-            break;
+            _context.next = 8;
+            return stripe.redirectToCheckout({
+              sessionId: session.data.session.id
+            });
 
           case 8:
-            _context.prev = 8;
+            _context.next = 14;
+            break;
+
+          case 10:
+            _context.prev = 10;
             _context.t0 = _context["catch"](1);
             console.log(_context.t0);
+            (0, _alert.showAlert)('error', _context.t0);
 
-          case 11:
+          case 14:
           case "end":
             return _context.stop();
         }
       }
-    }, _callee, null, [[1, 8]]);
+    }, _callee, null, [[1, 10]]);
   }));
 
   return function bookTour(_x) {
@@ -11394,7 +11407,7 @@ var bookTour = /*#__PURE__*/function () {
 }();
 
 exports.bookTour = bookTour;
-},{"axios":"../../node_modules/axios/index.js"}],"index.js":[function(require,module,exports) {
+},{"axios":"../../node_modules/axios/index.js","./alert":"alert.js"}],"index.js":[function(require,module,exports) {
 "use strict";
 
 require("core-js/modules/es6.array.copy-within.js");
@@ -11683,11 +11696,11 @@ var logOutBtn = document.querySelector('.nav__el--logout');
 var loginForm = document.querySelector('.form--login');
 var formUserData = document.querySelector('.form-user-data');
 var formUserPassword = document.querySelector('.form-user-password');
-var bookBtn = document.getElementById('book-tour'); // VALUES
+var bookBtn = document.querySelector('.book-tour'); // VALUES
 // DELEGATION
 
 if (mapBox) {
-  var locations = JSON.parse(mapBox.dataset.locations);
+  var locations = JSON.parse(mapBox.dataset.location);
   (0, _mapbox.displayMap)(locations);
 }
 
