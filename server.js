@@ -9,8 +9,8 @@ const DB = process.env.DATABASE.replace(
 );
 
 process.on('unhandleRejection', (err) => {
-  console.log('UNCAUGHT EXCEPTION! Shutting down...');
-  console.log(err.name, err.message);
+  // console.log('UNCAUGHT EXCEPTION! Shutting down...');
+  // console.log(err.name, err.message);
   process.exit(1);
 });
 
